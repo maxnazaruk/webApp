@@ -1,20 +1,14 @@
 package com.luxoft.webapp.server;
 
+import com.luxoft.webapp.server.request.RequestHandler;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 
 public class Server {
     private int port;
     private String webAppPath;
-
-    public static void main(String[] args) throws IOException {
-        Server server = new Server();
-        server.setPort(3000);
-        server.setWebAppPath("src/main/resources/webapp");
-        server.start();
-    }
 
     public void start() throws IOException {
         try (ServerSocket serverSocket = new ServerSocket(port);
@@ -33,6 +27,9 @@ public class Server {
     }
 
     public void setPort(int port) {
+        if (port < 0 || port > 65535){
+            throw new IllegalArgumentException();
+        }
         this.port = port;
     }
 

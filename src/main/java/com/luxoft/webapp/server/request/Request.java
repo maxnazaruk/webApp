@@ -1,4 +1,6 @@
-package com.luxoft.webapp.server;
+package com.luxoft.webapp.server.request;
+
+import com.luxoft.webapp.server.HttpMethod;
 
 import java.util.Map;
 

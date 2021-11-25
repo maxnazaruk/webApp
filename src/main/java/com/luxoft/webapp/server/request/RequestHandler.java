@@ -1,4 +1,8 @@
-package com.luxoft.webapp.server;
+package com.luxoft.webapp.server.request;
+
+import com.luxoft.webapp.server.exception.ServerException;
+import com.luxoft.webapp.server.resourcereader.ResourceReader;
+import com.luxoft.webapp.server.writer.ResponseWriter;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -16,13 +20,18 @@ public class RequestHandler {
 
     public void handle() throws IOException {
         RequestParser parser = new RequestParser();
-        Request request = parser.parse(this.socketReader);
-
-        ResourceReader resourceReader = new ResourceReader();
-        resourceReader.setWebAppPath(webAppPath);
-
         ResponseWriter writer = new ResponseWriter();
-        writer.writeSuccessRepsonse(resourceReader.readResources(request.getUri()), socketWriter);
+        Request request = null;
+        try {
+            request = parser.parse(this.socketReader);
+
+            ResourceReader resourceReader = new ResourceReader();
+            resourceReader.setWebAppPath(webAppPath);
+
+            writer.writeSuccessResponse(resourceReader.readResources(request.getUri()), socketWriter);
+        } catch (ServerException exception) {
+            writer.writeErrorResponse(socketWriter, exception);
+        }
     }
 
     public BufferedReader getSocketReader() {
