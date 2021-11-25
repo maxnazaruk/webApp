@@ -33,7 +33,6 @@ public class ResponseWriter {
     private static class ErrorWriter {
         ServerException exception;
         private static final String ERROR_MATRIX = "src/main/resources/webapp/matrixErr.html";
-        private String error;
 
         public ErrorWriter(ServerException exception) {
             this.exception = exception;

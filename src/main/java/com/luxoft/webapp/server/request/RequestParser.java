@@ -16,12 +16,14 @@ public class RequestParser {
     public Request parse(BufferedReader reader) throws IOException {
         Request request = new Request();
         String line = reader.readLine();
+
         injectUriAndMethod(line, request);
         injectHeaders(reader, request);
-        if(!request.getMethod().equals(HttpMethod.GET)){
-            throw new ServerException(ErrorType.METHOD_NOT_ALLOWED);
-        }if(request.getMethod() == null){
+
+        if(request.getMethod() == null){
             throw new ServerException(ErrorType.BAD_REQUEST);
+        }if(!request.getMethod().equals(HttpMethod.GET)){
+            throw new ServerException(ErrorType.METHOD_NOT_ALLOWED);
         }
         return request;
     }
@@ -29,7 +31,7 @@ public class RequestParser {
     public static void injectUriAndMethod(String line, Request request) {
         String uri = null;
 
-        Pattern uriPattern = Pattern.compile("\\s.*\\s");
+        Pattern uriPattern = Pattern.compile("\\s.*[A-Za-z]+\\.[a-z]{2,}\\s");
         Matcher uriMatcher = uriPattern.matcher(line);
         while (uriMatcher.find()) {
             uri = uriMatcher.group().trim();
@@ -57,7 +59,6 @@ public class RequestParser {
 
         while (true) {
             String head = reader.readLine();
-
             if (head.equals("")) {
                 break;
             }

@@ -11,14 +11,16 @@ public class Server {
     private String webAppPath;
 
     public void start() throws IOException {
-        try (ServerSocket serverSocket = new ServerSocket(port);
-             Socket socket = serverSocket.accept();
-             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()))) {
+        while(true) {
+            try (ServerSocket serverSocket = new ServerSocket(port);
+                 Socket socket = serverSocket.accept();
+                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()))) {
 
-            RequestHandler requestHandler = new RequestHandler(bufferedReader, bufferedWriter);
-            requestHandler.setWebAppPath(webAppPath);
-            requestHandler.handle();
+                RequestHandler requestHandler = new RequestHandler(bufferedReader, bufferedWriter);
+                requestHandler.setWebAppPath(webAppPath);
+                requestHandler.handle();
+            }
         }
     }
 
